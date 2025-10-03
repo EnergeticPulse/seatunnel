@@ -81,6 +81,11 @@ public class HttpSourceReader extends AbstractSingleSplitReader<SeaTunnelRow> {
      */
     private String rawBody = null;
 
+    private boolean enableItemsToObjectsConversion;
+    private String fieldsJsonPath;
+    private String itemsJsonPath;
+    private Map<String, String> fieldMapping;
+
     public HttpSourceReader(
             HttpParameter httpParameter,
             SingleSplitReaderContext context,
@@ -93,6 +98,10 @@ public class HttpSourceReader extends AbstractSingleSplitReader<SeaTunnelRow> {
         this.jsonField = jsonField;
         this.contentJson = contentJson;
         this.rawBody = httpParameter.getBody();
+        this.enableItemsToObjectsConversion = httpParameter.isEnableItemsToObjectsConversion();
+        this.fieldsJsonPath = httpParameter.getFieldsJsonPath();
+        this.itemsJsonPath = httpParameter.getItemsJsonPath();
+        this.fieldMapping = httpParameter.getFieldMapping();
     }
 
     public HttpSourceReader(
@@ -134,6 +143,11 @@ public class HttpSourceReader extends AbstractSingleSplitReader<SeaTunnelRow> {
                         this.httpParameter.isKeepParamsAsForm());
         if (response.getCode() >= 200 && response.getCode() <= 207) {
             String content = response.getContent();
+            if (enableItemsToObjectsConversion) {
+                content =
+                        JsonPathUtils.transformItemsToArrayOfObjects(
+                                content, fieldsJsonPath, itemsJsonPath, fieldMapping);
+            }
             if (!Strings.isNullOrEmpty(content)) {
                 if (this.httpParameter.isEnableMultilines()) {
                     StringReader stringReader = new StringReader(content);

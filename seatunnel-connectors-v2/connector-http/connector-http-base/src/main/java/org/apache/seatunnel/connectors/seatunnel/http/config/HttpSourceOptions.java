@@ -153,4 +153,32 @@ public class HttpSourceOptions extends HttpCommonOptions {
                     .booleanType()
                     .defaultValue(false)
                     .withDescription("When the json field is missing, return null");
+
+    public static final Option<Boolean> ENABLE_ITEMS_TO_OBJECTS_CONVERSION =
+            Options.key("enable_items_to_objects_conversion")
+                    .booleanType()
+                    .defaultValue(false)
+                    .withDescription(
+                            "Enable automatic conversion of items array to object array based on fields. Default: false");
+
+    public static final Option<String> FIELDS_JSON_PATH =
+            Options.key("fields_json_path")
+                    .stringType()
+                    .defaultValue("data.fields")
+                    .withDescription(
+                            "JSON path to the array containing field names. Default: 'fields'");
+
+    public static final Option<String> ITEMS_JSON_PATH =
+            Options.key("items_json_path")
+                    .stringType()
+                    .defaultValue("data.items")
+                    .withDescription(
+                            "JSON path to the array containing data rows. Default: 'items'");
+
+    public static final Option<Map<String, String>> FIELD_MAPPING =
+            Options.key("field_mapping")
+                    .mapType()
+                    .noDefaultValue()
+                    .withDescription(
+                            "Specify field name mapping from array index to output field name. Example: {\"0\": \"code\", \"1\": \"full_name\"}");
 }
