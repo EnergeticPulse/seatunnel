@@ -46,6 +46,10 @@ public class HttpParameter implements Serializable {
     protected int batchSize = 1;
     protected int requestIntervalMs = 0;
     protected boolean jsonFiledMissedReturnNull;
+    protected String fieldsJsonPath;
+    protected String itemsJsonPath;
+    protected boolean enableItemsToObjectsConversion = false;
+    protected Map<String, String> fieldMapping;
 
     public void buildWithConfig(ReadonlyConfig pluginConfig) {
         // set url
